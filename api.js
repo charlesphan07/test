@@ -1,13 +1,30 @@
 var express    = require('express');
 var app        = express(); 
+var bodyParser = require('body-parser');
 var path = require('path');
 
-
-app.use(express.static(__dirname + /public)); 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(express.static(__dirname + '/public')); 
 
 var port = process.env.PORT || 8080;
 
+var mongoose   = require('mongoose');
+var uri = 
+  process.env.MONGOLAB_URI || 
+  'mongodb://test:test@ds031872.mongolab.com:31872/demomango';
+
+mongoose.connect(uri, function (err, res) {
+  if (err) { 
+    console.log ('Erreur pour se connecter à: ' + uri + '. ' + err);
+  } else {
+    console.log ('Connexion réussie à la BD' + uri);
+  }
+});
+
 var fonctions = require('./scripts/fonctions.js');
+
+var Etudiant = require('./models/etudiant');
 
 var Message = 'Partie 2';
 // --------------------
